@@ -8,7 +8,7 @@ df = pd.read_csv('../data/all_df.csv', encoding='utf-8', sep=',')
 sellers = df['Контрагент'].unique()
 brands = df['ТМ'].unique()
 report_type = df['Тип'].unique()
-print(df)
+#print(df)
 
 
 sellers_d = requests.get('http://127.0.0.1:8000/api/sellers/?format=json').json()
@@ -46,35 +46,35 @@ report_type_d = requests.get('http://127.0.0.1:8000/api/report-types/?format=jso
 report_type_dict = dict((elem['name'], elem['id']) for elem in report_type_d)
 
 for elem in reports_d:
-    print(elem, elem.get('Контрагент'))
+    # print(elem, elem.get('Контрагент'))
     for key_elem in sellers_dict.keys():
-        print(key_elem)
+        # print(key_elem)
         if elem.get('Контрагент') == key_elem:
-            print(elem, elem.get('Контрагент'))
+            # print(elem, elem.get('Контрагент'))
             elem['Контрагент'] = sellers_dict.get(key_elem)
-            print(sellers_dict.get('key_elem'))
+            # print(sellers_dict.get('key_elem'))
 
 
 for elem in reports_d:
-    print(elem, elem.get('ТМ'))
+    # print(elem, elem.get('ТМ'))
     for key_elem in brands_dict.keys():
-        print(key_elem)
+        # print(key_elem)
         if elem.get('ТМ') == key_elem:
-            print(elem, elem.get('ТМ'))
+            # print(elem, elem.get('ТМ'))
             elem['ТМ'] = brands_dict.get(key_elem)
-            print(brands_dict.get('key_elem'))
+            # print(brands_dict.get('key_elem'))
 
 
 for elem in reports_d:
-    print(elem, elem.get('Тип'))
+    # print(elem, elem.get('Тип'))
     for key_elem in report_type_dict.keys():
-        print(key_elem)
+        # print(key_elem)
         if elem.get('Тип') == key_elem:
-            print(elem, elem.get('Тип'))
+            # print(elem, elem.get('Тип'))
             elem['Тип'] = report_type_dict.get(key_elem)
-            print(report_type_dict.get('key_elem'))
+            # print(report_type_dict.get('key_elem'))
 
-print(reports_d)
+# print(reports_d)
 
 # report_dict1 = requests.get('http://127.0.0.1:8000/api/reports/?format=json').json()
 
@@ -84,34 +84,14 @@ for elem in reports_d:
     b = elem.get('ТМ')
     rt = elem.get('Тип')
     t, m = elem.get('Стоимость'), elem.get('Валовый Доход')
-    if len(requests.get(f'http://127.0.0.1:8000/api/reports/?seller={s}&brand={b}&date={d}&report_type={rt}').json()) == 0:
-        requests.put(f'http://127.0.0.1:8000/api/reports/?seller={s}&brand={b}&date={d}&report_type={rt}',
+    if len(requests.get(f'http://127.0.0.1:8000/api/reports/?format=json&seller={s}&brand={b}&date={d}&report_type={rt}').json()):
+        requests.put(f'http://127.0.0.1:8000/api/reports/?format=json&seller={s}&brand={b}&date={d}&report_type={rt}',
                      data={'turnover': t, 'margin': m})
-    else:
-        requests.post('http://127.0.0.1:8000/api/reports/?format=json',
-                      data={'date': d, 'seller': s, 'brand': b, 'turnover': t, 'margin': m, 'report type': rt})
 
+    requests.post('http://127.0.0.1:8000/api/reports/?format=json',
+                  data={'date': d, 'seller': s, 'brand': b, 'turnover': t, 'margin': m, 'report type': rt})
+print(requests.get('http://127.0.0.1:8000/api/reports/?format=json&seller'))
 
-
-# for elem_dict in report_dict1:
-#     print(elem_dict)
-#     for elem in reports_d:
-#         print(elem)
-#         if ((elem.get('Период') != elem_dict['date']) and
-#             (elem.get('Контрагент') != elem_dict['seller']) and
-#             (elem.get('Тип') != elem_dict['report_type']) and
-#             (elem.get('ТМ') != report_dict1['brand'])):
-#
-#             d, s, b, t, m, rt = elem.get('Период'), elem.get('Контрагент'), elem.get('ТМ'), elem.get('Стоимость'), elem.get('Валовый Доход'), elem.get('Тип')
-#             requests.post('http://127.0.0.1:8000/api/reports/?format=json',
-#                           data={'date': d, 'seller': s, 'brand': b, 'turnover': t, 'margin': m, 'report type': rt})
-#             print(elem)
-#         else:
-#             t, m = elem.get('Стоимость'), elem.get('Валовый Доход')
-#             requests.put('http://127.0.0.1:8000/api/reports/{}/?format=json'.format(elem_dict['id']), data={'turnover': t, 'margin': m})
-#             print(elem, 'else')
-
-# не понимаю как сделать put взамен существующих строк
 
 
 
