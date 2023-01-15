@@ -72,11 +72,7 @@ for elem in reports_d:
         if elem.get('Тип') == key_elem:
             # print(elem, elem.get('Тип'))
             elem['Тип'] = report_type_dict.get(key_elem)
-            # print(report_type_dict.get('key_elem'))
 
-# print(reports_d)
-
-# report_dict1 = requests.get('http://127.0.0.1:8000/api/reports/?format=json').json()
 
 for elem in reports_d:
     d = elem.get('Период')
@@ -91,31 +87,3 @@ for elem in reports_d:
     requests.post('http://127.0.0.1:8000/api/reports/?format=json',
                   data={'date': d, 'seller': s, 'brand': b, 'turnover': t, 'margin': m, 'report type': rt})
 print(requests.get('http://127.0.0.1:8000/api/reports/?format=json&seller'))
-
-
-
-
-# with open('plan.csv', 'r', encoding='utf-8') as f:
-#     reader = list(csv.reader(f))
-#     for row in reader[1:]:
-#         d, s, b, t, m, rt = row[0], row[1], row[2], row[3], row[4], row[5]
-#         requests.post('http://127.0.0.1:8000/api/reports/?format=json', data={'Date':d, 'Seller':s, 'Brand':b, 'Turnover':t, 'Margin':m, 'Report type':rt})
-
-
-
-# req = requests.get('http://127.0.0.1:8000/api/sellers/?format=json')
-# sellers = req.json()
-# sellers_dict = dict((elem['name'], elem['id']) for elem in sellers)
-# print(sellers_dict)
-# requests.post('http://127.0.0.1:8000/api/sellers/?format=json', data = {'name':'sssaaaa'})
-# print(req.json())
-# requests.delete('http://127.0.0.1:8000/api/sellers/4/?format=json', data={'name':'sssaaaa'})
-# requests.put('http://127.0.0.1:8000/api/sellers/1/?format=json', data={'name':'dddd'})
-# print(requests.get('http://127.0.0.1:8000/api/sellers/?format=json').json())
-
-
-from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
-
-for user in User.objects.all():
-    Token.objects.get_or_create(user=user)
